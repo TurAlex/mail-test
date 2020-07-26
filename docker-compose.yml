@@ -1,0 +1,97 @@
+version: '3'
+
+services:
+  web:
+    image: webdevops/apache:alpine
+    container_name: ${APP_NAME}_web
+    hostname: ${APP_NAME}_web
+    environment:
+      WEB_DOCUMENT_ROOT: /app/public
+      WEB_PHP_SOCKET: ${APP_NAME}_php:9000
+      LOG_STDOUT: /app/docker/storage/logs/web.access.log
+      LOG_STDERR: /app/docker/storage/logs/web.errors.log
+    volumes:
+      - ./:/app:rw
+    working_dir: /app
+    ports:
+      - ${DOCKER_BRIDGE}:80:80
+      - ${DOCKER_BRIDGE}:443:443
+    depends_on:
+      - php
+    restart: always
+
+  php:
+    build:
+      context: ./
+      dockerfile: docker/dev/php/Dockerfile
+    container_name: ${APP_NAME}_php
+    hostname: ${APP_NAME}_php
+    volumes:
+      - ./:/app:rw
+      - ./docker/dev/php/.bashrc:/root/.bashrc
+      - ./docker/dev/php/.bash_aliases:/root/.bash_aliases
+    working_dir: /app
+    environment:
+      TERM: xterm-256color
+      COMPOSER_ALLOW_SUPERUSER: 1
+      XDEBUG_CONFIG: "remote_host=${DOCKER_BRIDGE} remote_enable=1"
+      PHP_IDE_CONFIG: "serverName=Docker"
+#      BLACKFIRE_SERVER_ID: ${BLACKFIRE_SERVER_ID}
+#      BLACKFIRE_SERVER_TOKEN: ${BLACKFIRE_SERVER_TOKEN}
+#      BLACKFIRE_LOG_LEVEL: ${BLACKFIRE_LOG_LEVEL}
+#      BLACKFIRE_LOG_FILE=: ${BLACKFIRE_LOG_FILE}
+#      BLACKFIRE_CONFIG: ${BLACKFIRE_CONFIG}
+#      BLACKFIRE_SOCKET: ${BLACKFIRE_SOCKET}
+    ports:
+      - ${DOCKER_BRIDGE}:6001:6001
+    restart: always
+    depends_on:
+      - db
+    entrypoint: ["/bin/bash", "/usr/bin/php_init.sh"]
+
+  db:
+    image: mysql:5.7.28
+    container_name: ${APP_NAME}_db
+    hostname: ${APP_NAME}_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db
+    ports:
+      - ${DOCKER_BRIDGE}:3036:3036
+    volumes:
+      - ./docker/storage/db/mysql:/var/lib/mysql
+
+  cache:
+    image: nbtri/alpine-redis
+    container_name: ${APP_NAME}_cache
+    hostname: ${APP_NAME}_cache
+    restart: always
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    ports:
+      - ${DOCKER_BRIDGE}:6379:6379
+
+#  elasticsearch:
+#    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.8
+#    container_name: ${APP_NAME}_elasticsearch
+#    hostname: ${APP_NAME}_elasticsearch
+#    environment:
+#      - bootstrap.memory_lock=true
+#      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+#    restart: always
+#    ulimits:
+#      memlock:
+#        soft: -1
+#        hard: -1
+#    volumes:
+#      - ./storage/elastic:/usr/share/elasticsearch/data
+#    ports:
+#      - ${DOCKER_BRIDGE}:9200:9200
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${DOCKER_NETWORK}
