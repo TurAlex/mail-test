@@ -13,3 +13,4 @@ yarn-error.log
 .idea
 /docker/storage/db/mysql
 /docker/storage/logs
+_ide_helper.php

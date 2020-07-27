@@ -56,4 +56,4 @@ RUN chmod +x /usr/bin/php_init.sh
 
 COPY ./docker/dev/php/supervisor/horizon.conf /etc/supervisor/conf.d
 #COPY ./docker/dev/php/supervisor/websockets.conf /etc/supervisor/conf.d
-#COPY ./docker/dev/php/cron/settings.cron /etc/cron.d
+COPY ./docker/dev/php/cron/settings.cron /etc/cron.d

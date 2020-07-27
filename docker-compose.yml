@@ -18,7 +18,7 @@ services:
       - ${DOCKER_BRIDGE}:443:443
     depends_on:
       - php
-    restart: always
+    restart: unless-stopped
 
   php:
     build:
@@ -44,7 +44,7 @@ services:
 #      BLACKFIRE_SOCKET: ${BLACKFIRE_SOCKET}
     ports:
       - ${DOCKER_BRIDGE}:6001:6001
-    restart: always
+    restart: unless-stopped
     depends_on:
       - db
     entrypoint: ["/bin/bash", "/usr/bin/php_init.sh"]
@@ -53,12 +53,12 @@ services:
     image: mysql:5.7.28
     container_name: ${APP_NAME}_db
     hostname: ${APP_NAME}_db
-    restart: always
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: db
     ports:
-      - ${DOCKER_BRIDGE}:3036:3036
+      - ${DOCKER_BRIDGE}:3306:3306
     volumes:
       - ./docker/storage/db/mysql:/var/lib/mysql
 
@@ -66,7 +66,7 @@ services:
     image: nbtri/alpine-redis
     container_name: ${APP_NAME}_cache
     hostname: ${APP_NAME}_cache
-    restart: always
+    restart: unless-stopped
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
     ports:
@@ -79,7 +79,7 @@ services:
 #    environment:
 #      - bootstrap.memory_lock=true
 #      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-#    restart: always
+#    restart: unless-stopped
 #    ulimits:
 #      memlock:
 #        soft: -1

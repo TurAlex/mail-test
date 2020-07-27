@@ -12,6 +12,7 @@ cache=cache
 #node = node
 
 build:
+	sudo cp -R -u -p .env.example .env
 	sudo mkdir -p vendor
 	sudo chmod 777 -R vendor/
 	sudo chmod 777 -R docker/storage
@@ -19,7 +20,8 @@ build:
 	sudo chmod 777 -R vendor/
 	sudo chmod 777 -R docker/storage
 	sudo chmod 777 -R storage
-	echo "http://${DOCKER_BRIDGE}"
+	echo "FRONT - http://${DOCKER_BRIDGE}"
+	echo "HORIZON - http://${DOCKER_BRIDGE}/horizon/dashboard"
 
 start:
 	$(dc) start
