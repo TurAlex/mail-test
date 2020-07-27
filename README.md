@@ -18,7 +18,7 @@
   
 #### check if horizon is running then the installation (build) is over if not just wait for composer to install all packages.  
 `php artisan migrate`  
-#####it's set to 10 000 users and 1 000 messages you can change this parameters in seeders or modify them on your purpose.
+##### it's set to 10 000 users and 1 000 messages you can change this parameters in seeders or modify them on your purpose.
 `php artisan db:seed`  
 `php artisan ide-helper:generate`  
 
@@ -26,5 +26,5 @@ uncomment `$schedule->command('scheduled-messages:send')->everyMinute();` in App
 
 
 
-/todo/
+### todo
 - handle message not sent (write to db and schedule resend)
