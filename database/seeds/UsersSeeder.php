@@ -13,7 +13,7 @@ class UsersSeeder extends Seeder
      */
 
     public const START_ID = 1;
-    public const FINISH_ID = 100000;
+    public const FINISH_ID = 10000;
 
     public function run()
     {
@@ -35,7 +35,7 @@ class UsersSeeder extends Seeder
                     'timezone' => $timeZones[$faker->biasedNumberBetween(0, $timeZonesMaxIndex)],
                 ];
 
-                if ($i % 1000 == 0) {
+                if ($i % 10000 == 0) {
                     User::insert($users);
                     $users = [];
                     dump('users seeded:' . $i);

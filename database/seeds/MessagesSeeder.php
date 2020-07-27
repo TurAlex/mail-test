@@ -23,7 +23,7 @@ class MessagesSeeder extends Seeder
 
         try {
             DB::beginTransaction();
-            for ($i = self::START_ID; $i < self::FINISH_ID; $i++) {
+            for ($i = self::START_ID; $i <= self::FINISH_ID; $i++) {
                 $messages[] = [
 //                'id' => $i,
                     'subject' => $faker->sentence(4),

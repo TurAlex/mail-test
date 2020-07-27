@@ -15,7 +15,10 @@ wait for composer to install all packages (just check the folder)
 `make php_bash`  
 `supervisorctl status`  --check if horizon is running then the installation (build) is over  
 `php artisan migrate`  
+#####it's set to 10 000 users and 1 000 messages you can change this parameters in seeders or modify them on your purpose.
 `php artisan db:seed`  
+`php artisan ide-helper:generate`  
+
 uncomment `$schedule->command('scheduled-messages:send')->everyMinute();` in App\Console\Kernel
 
 
