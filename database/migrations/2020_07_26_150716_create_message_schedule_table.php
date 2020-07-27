@@ -15,7 +15,10 @@ class CreateMessageScheduleTable extends Migration
     {
         Schema::create('message_schedule', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('message_id')->constrained('messages');
+            $table->foreignId('message_id')
+                ->constrained('messages')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->string('time', 5)->index();
         });
     }

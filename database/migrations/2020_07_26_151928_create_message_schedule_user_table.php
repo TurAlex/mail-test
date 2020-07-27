@@ -16,9 +16,14 @@ class CreateMessageScheduleUserTable extends Migration
         Schema::create('message_schedule_user', function (Blueprint $table) {
             $table->primary(['message_schedule_id', 'user_id']);
 
-            $table->foreignId('message_schedule_id')->constrained('message_schedule');
-            $table->foreignId('user_id')->constrained('users');
-
+            $table->foreignId('message_schedule_id')
+                ->constrained('message_schedule')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 
