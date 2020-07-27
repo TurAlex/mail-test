@@ -8,12 +8,15 @@
 </p>
 
 ## 
-##how to install
+##how to install  
+
 `cp .env.example .env`  
 `make build`  
-wait for composer to install all packages (just check the folder)  
 `make php_bash`  
-`supervisorctl status`  --check if horizon is running then the installation (build) is over  
+`supervisorctl status`
+
+  
+#### check if horizon is running then the installation (build) is over if not just wait for composer to install all packages.  
 `php artisan migrate`  
 #####it's set to 10 000 users and 1 000 messages you can change this parameters in seeders or modify them on your purpose.
 `php artisan db:seed`  
