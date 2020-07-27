@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\SendTimezoneMessagesJob;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class SendMessages extends Command
@@ -36,9 +37,10 @@ class SendMessages extends Command
     {
         //select all available timezones -- maybe better way to add dictionary to db or a static data
         $timeZones = User::groupBy('timezone')->select('timezone')->pluck('timezone');
-        $time = now()->format('H:i');
+        $currentTime = now()->format('H:i');
 
         foreach ($timeZones as $timeZone) {
+            $time = Carbon::parse($currentTime, $timeZones)->format('H:i');
             dispatch(new SendTimezoneMessagesJob($timeZone, $time));
         }
     }
