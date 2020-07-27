@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
 //         $schedule->command('inspire')->hourly();
 
 
-        $schedule->command('scheduled-messages:send')->everyMinute();
+//        $schedule->command('scheduled-messages:send')->everyMinute();
     }
 
     /**

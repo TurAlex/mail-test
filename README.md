@@ -7,3 +7,18 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
 
+## 
+##how to install
+`cp .env.example .env`  
+`make build`  
+wait for composer to install all packages (just check the folder)  
+`make php_bash`  
+`supervisorctl status`  --check if horizon is running then the installation (build) is over  
+`php artisan migrate`  
+`php artisan db:seed`  
+uncomment `$schedule->command('scheduled-messages:send')->everyMinute();` in App\Console\Kernel
+
+
+
+/todo/
+- handle message not sent (write to db and schedule resend)

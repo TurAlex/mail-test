@@ -24,27 +24,34 @@ class MessageScheduleSeeder extends Seeder
         $finish = $time->copy()->endOfDay();
 
         $totalQuantity = 0;
-        while ($time->lt($finish)) {
-            $messagesQuantity = $faker->numberBetween(1, 150);
-            $totalQuantity += $messagesQuantity;
-            $messageTime = $time->format('H:i');
-            for ($i = 1; $i <= $messagesQuantity; $i++) {
-                $messageSchedule[] = [
-                    'time' => $messageTime,
-                    'message_id' => $faker->numberBetween(MessagesSeeder::START_ID, MessagesSeeder::FINISH_ID),
-                ];
-            }
 
-            if ($totalQuantity > 10000) {
-                MessageSchedule::insert($messageSchedule);
-                $totalQuantity = 0;
-                $messageSchedule = [];
-                dump($messageTime);
+        try {
+            DB::beginTransaction();
+            while ($time->lt($finish)) {
+                $messagesQuantity = $faker->numberBetween(1, 150);
+                $totalQuantity += $messagesQuantity;
+                $messageTime = $time->format('H:i');
+                for ($i = 1; $i <= $messagesQuantity; $i++) {
+                    $messageSchedule[] = [
+                        'time' => $messageTime,
+                        'message_id' => $faker->numberBetween(MessagesSeeder::START_ID, MessagesSeeder::FINISH_ID),
+                    ];
+                }
+
+                if ($totalQuantity > 10000) {
+                    MessageSchedule::insert($messageSchedule);
+                    $totalQuantity = 0;
+                    $messageSchedule = [];
+                    dump($messageTime);
+                }
+                $time->addMinute();
             }
-            $time->addMinute();
+            MessageSchedule::insert($messageSchedule);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            dd($e->getMessage());
         }
-        MessageSchedule::insert($messageSchedule);
-
     }
 
 }

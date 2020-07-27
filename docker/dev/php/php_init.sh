@@ -2,9 +2,8 @@
 
 chmod +x artisan
 
-composer install --no-progress --prefer-dist --working-dir=/app
-
-#php artisan key:generate
+composer install
+php artisan key:generate
 #php artisan migrate --no-interaction
 #php artisan db:seed
 
